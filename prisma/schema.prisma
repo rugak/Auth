@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Using sqlite
+
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
+
+// model Movie {
+//   id          Int       @id @default(autoincrement())
+//   title       String
+//   description String
+//   releaseDate DateTime
+//   note        Int?
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt
+// }
+
+// Using postgresql
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Movie {
+  id          Int                  @id @default(autoincrement())
+  title       String               @db.VarChar(128)
+  description String               @db.VarChar(2048)
+  releaseDate DateTime
+  note        Int?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  categories  CategoriesOnMovies[]
+  Image       Image?               @relation(fields: [imageId], references: [id])
+  imageId     Int?
+}
+
+model Category {
+  id        Int                  @id @default(autoincrement())
+  name      String               @db.VarChar(128)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  movies    CategoriesOnMovies[]
+}
+
+model CategoriesOnMovies {
+  movie      Movie    @relation(fields: [movieId], references: [id])
+  movieId    Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  assignedAt DateTime @default(now())
+
+  @@id([movieId, categoryId])
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(255)
+  size      Int      @db.Integer
+  mimeType  String   @db.VarChar(16)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  movies    Movie[]
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  login        String        @db.VarChar(255)
+  password     String        @db.VarChar(16)
+  roles        String[]
+  status       String        @db.VarChar(16)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  refreshToken RefreshToken?
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+}
+
+model Connexion {
+  id       Int      @id @default(autoincrement())
+  ipAddress String   @db.VarChar(16)
+  createdAt DateTime @default(now())
+  failed    Boolean
+}
