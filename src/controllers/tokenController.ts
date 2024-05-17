@@ -34,7 +34,7 @@ export const createToken = async (req: Request, res: Response) => {
 
 
     // Check if the user has made too many attempts
-    let attempts = await prisma.connexion.findMany({ where: { ipAddress: ip, failed: true, createdAt: { gte: new Date(Date.now() - 300) } } });
+    let attempts = await prisma.connexion.findMany({ where: { ipAddress: ip, failed: true, createdAt: { gte: new Date(Date.now() - 300 * 1000) } } });
 
     if (attempts.length > 3) {
 
@@ -88,9 +88,9 @@ export const createAccessToken = async (user: User | null) =>{
 
     const tokenData: CreateTokenResponse = {
         accessToken: token,
-        accessTokenExpiresAt: new Date(Date.now() + 3600),
+        accessTokenExpiresAt: new Date(Date.now() + 3600 * 1000),
         refreshToken: refreshToken,
-        refreshTokenExpiresAt: new Date(Date.now() + 7200),
+        refreshTokenExpiresAt: new Date(Date.now() + 7200 * 1000),
     } as CreateTokenResponse;
 
     return tokenData;
