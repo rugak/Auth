@@ -2,7 +2,6 @@ import { PrismaClient, User, RefreshToken } from "@prisma/client";
 import { Request, Response } from "express";
 import * as userModel from "../models/userModel";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { access } from "fs";
 
 export type CreateTokenResponse = {
     accessToken: string,
@@ -18,7 +17,10 @@ const prisma = new PrismaClient();
 /**Create */
 
 export const createToken = async (req: Request, res: Response) => {
-
+/* 
+   #swagger.tags = ['Access Token']
+   #swagger.summary = 'This endpoint create a token.'
+   */
     const login: string = req.body.login;
     const password: string = req.body.password;
     const from: string = req.body.from;
@@ -94,21 +96,19 @@ export const createAccessToken = async (user: User | null) =>{
 
 };
 
+/**Refresh */
 interface CustomTokenPayload extends jwt.JwtPayload {
 
     login: string;
     userRole: string[];
 }
 
-
-/**Refresh */
-
 export const createTokenFromRefreshToken = async (req: Request, res: Response) => {
      /* 
   #swagger.tags = ['Refresh Token']
-  #swagger.summary = 'Création d\'un token à partir d\'un refresh token.
+  #swagger.summary = 'This endpoint creates an access token from a refresh token'.
   */
-    const refreshToken: string = req.body.refreshToken;
+    const refreshToken: string = req.params.refreshToken;
 
     jwt.verify(refreshToken, JWT_SECRET_REFRESH, async (err, decodedToken) => {
 
@@ -135,14 +135,16 @@ export const createTokenFromRefreshToken = async (req: Request, res: Response) =
         };
 
     });
-
 };
 
 /**Validate */
 
 export const ValidateToken = async (req: Request, res: Response) => {
-
-    const token: string = req.body.token;
+/* 
+   #swagger.tags = ['Access Token']
+   #swagger.summary = 'This endpoint create a token.'
+   */
+    const token: string = req.body.accessToken;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
 

@@ -13,15 +13,15 @@
   "basePath": "/api",
   "tags": [
     {
-      "name": "Welcome",
-      "description": "Endpoints de base de l'API"
-    },
-    {
-      "name": "User",
+      "name": "Account",
       "description": "Endpoints pour la gestion des utilisateurs"
     },
     {
-      "name": "Token",
+      "name": "Refresh Token",
+      "description": "Endpoints pour la gestion des tokens"
+    },
+    {
+      "name": "Access Token",
       "description": "Endpoints pour la gestion des tokens"
     }
   ],
@@ -39,11 +39,16 @@
     "/account": {
       "post": {
         "tags": [
-          "User"
+          "Account"
         ],
         "summary": "This endpoint create an account.",
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -73,14 +78,121 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
           "500": {
             "description": "Internal Server Error"
           }
         }
       }
     },
+    "/account/{uid}": {
+      "put": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "This endpoint updates an account.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "login": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "roles": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Account"
+        ],
+        "summary": "This endpoint gets an account",
+        "description": "",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
     "/token": {
       "post": {
+        "tags": [
+          "Access Token"
+        ],
+        "summary": "This endpoint create a token.",
         "description": "",
         "parameters": [
           {
@@ -103,11 +215,70 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "OK"
           },
           "400": {
             "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/validate/{accessToken}": {
+      "get": {
+        "tags": [
+          "Access Token"
+        ],
+        "summary": "This endpoint create a token.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "accessToken",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/refresh-token/{refreshToken}/token": {
+      "post": {
+        "tags": [
+          "Refresh Token"
+        ],
+        "summary": "This endpoint creates an access token from a refresh token",
+        "description": "",
+        "parameters": [
+          {
+            "name": "refreshToken",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"

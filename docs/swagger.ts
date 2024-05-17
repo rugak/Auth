@@ -18,16 +18,17 @@ const doc = {
   consumes: ["application/json"],
   produces: ["application/json"],
   tags: [
+    
     {
-      name: "Welcome",
-      description: "Endpoints de base de l'API",
-    },
-    {
-      name: "User",
+      name: "Account",
       description: "Endpoints pour la gestion des utilisateurs",
     },
     {
-      name: "Token",
+      name: "Refresh Token",
+      description: "Endpoints pour la gestion des tokens",
+    },
+    {
+      name: "Access Token",
       description: "Endpoints pour la gestion des tokens",
     },
   ],
