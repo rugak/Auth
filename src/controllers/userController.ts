@@ -102,11 +102,18 @@ export const updateAccount = async (req: Request, res: Response) => {
   if (!uid || !login || !password || !roles || !status) {
     return res.status(400).json({ errorMessage: "All fields are required" });
   }
-
+for (let i = 0; i < roles.length; i++) {
+    if (roles[i] !== "ROLE_ADMIN" && roles[i] !== "ROLE_USER") {
+      return res.status(400).json({ errorMessage: "Invalid role" });
+    }
+  }
+  
 
   let isAdmin = false;
   const userRoles = (jwt.decode(token) as JwtPayload).userRole;
+
   for (let i = 0; i < userRoles.length; i++) {
+    
     if (userRoles[i] === "ROLE_ADMIN") {
       isAdmin = true;
     }
@@ -154,19 +161,20 @@ export const updateAccount = async (req: Request, res: Response) => {
 
     else if (isAdmin) {
 
-      const currentUser = await prisma.user.findFirst({ where: { login: (decodedToken as JwtPayload).login } });
+      let currentUser = await prisma.user.findFirst({ where: { login: (decodedToken as JwtPayload).login } });
 
       if (!currentUser) {
         return res.status(404).json({ errorMessage: "User not found" });
       }
 
+    
       const user: User = {
         login,
         password,
         status,
         updatedAt: new Date(),
         createdAt: currentUser.createdAt!,
-        id: parseInt(uid),
+        id: uid == "me" ? currentUser.id : parseInt(uid),
         roles: roles
       };
 

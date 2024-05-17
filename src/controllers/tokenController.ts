@@ -74,8 +74,9 @@ export const createAccessToken = async (user: User | null) =>{
     const refreshToken = jwt.sign({ login: user.login }, JWT_SECRET_REFRESH, { expiresIn: "2h" });
 
     let refreshTokenData = await prisma.refreshToken.findFirst({ where: { userId: user.id } });
+    console.log(" refreshToken Data",refreshTokenData);
     if (refreshTokenData) {
-        prisma.refreshToken.delete({ where: { id: refreshTokenData.id } });
+        await prisma.refreshToken.delete({ where: { userId: user.id } });
     }
 
     await prisma.refreshToken.create({

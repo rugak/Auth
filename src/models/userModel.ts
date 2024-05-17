@@ -30,6 +30,7 @@ export const updateAccount = async (user: User, callback: Function) => {
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
+        id: user.id,
         login: user.login,
         password: user.password,
         roles: user.roles,
