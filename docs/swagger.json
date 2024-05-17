@@ -72,6 +72,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Created"
           },
@@ -83,6 +86,9 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
