@@ -218,7 +218,7 @@ export const getAccount = async (req: Request, res: Response) => {
     const roles = (decodedToken as JwtPayload).userRole;
 
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i] !== "ROLE_ADMIN") {
+      if (roles[i] == "ROLE_ADMIN") {
         isAdmin = true;
       }
     }
