@@ -145,7 +145,7 @@ export const ValidateToken = async (req: Request, res: Response) => {
    #swagger.tags = ['Access Token']
    #swagger.summary = 'This endpoint create a token.'
    */
-    const token: string = req.body.accessToken;
+    const token: string = req.params.accessToken;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
 
