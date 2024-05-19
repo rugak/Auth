@@ -28,7 +28,14 @@
   "schemes": [
     "http"
   ],
-  "securityDefinitions": {},
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-KEY",
+      "description": "Some description..."
+    }
+  },
   "consumes": [
     "application/json"
   ],
@@ -45,36 +52,44 @@
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
+            "name": "createAccountRequest",
             "in": "body",
+            "description": "Account creation parameters",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "login": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "roles": {
-                  "example": "any"
+                  "type": "array",
+                  "example": [
+                    "string "
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "status": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
             "description": "Created"
           },
@@ -87,13 +102,15 @@
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not Found"
-          },
           "500": {
             "description": "Internal Server Error"
           }
-        }
+        },
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
       }
     },
     "/account/{uid}": {
@@ -111,30 +128,41 @@
             "type": "string"
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
+            "name": "editAccountRequest",
             "in": "body",
+            "description": "Account creation parameters",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "login": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "roles": {
-                  "example": "any"
+                  "type": "array",
+                  "example": [
+                    "string "
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
                 },
                 "status": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 }
               }
             }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
@@ -198,23 +226,28 @@
         "tags": [
           "Access Token"
         ],
-        "summary": "This endpoint create a token.",
+        "summary": "This endpoint creates a token.",
         "description": "",
         "parameters": [
           {
-            "name": "body",
+            "name": "createTokenRequest",
             "in": "body",
+            "description": "Token creation parameters",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "login": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string"
                 },
                 "from": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "string "
                 }
               }
             }

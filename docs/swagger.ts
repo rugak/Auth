@@ -12,6 +12,14 @@ const doc = {
       email: "",
     },
   },
+  securityDefinitions: {
+    apiKeyAuth: {
+      type: 'apiKey',
+      in: 'header', 
+      name: 'X-API-KEY',
+      description: 'Some description...'
+    }
+  },
   host: "localhost:" + process.env.PORT,
   basePath: "/api",
   schemes: ["http"],
@@ -32,7 +40,6 @@ const doc = {
       description: "Endpoints pour la gestion des tokens",
     },
   ],
-  securityDefinitions: {},
   definitions: {},
 };
 

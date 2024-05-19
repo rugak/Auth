@@ -19,6 +19,19 @@ export const createAccount = async (req: Request, res: Response) => {
   /* 
    #swagger.tags = ['Account']
    #swagger.summary = 'This endpoint create an account.'
+   #swagger.parameters['createAccountRequest'] = {
+           in: 'body',
+           description: 'Account creation parameters',
+           required: true,
+           schema: {
+                   login: "string",
+                   password: "string",
+                   roles: ["string "],
+                    status: "string"
+           }
+       }
+
+    }]
    */
 
   const token: string | undefined = req.headers.authorization;
@@ -95,6 +108,17 @@ export const updateAccount = async (req: Request, res: Response) => {
   /* 
      #swagger.tags = ['Account']
      #swagger.summary = 'This endpoint updates an account.'
+     #swagger.parameters['editAccountRequest'] = {
+           in: 'body',
+           description: 'Account creation parameters',
+           required: true,
+           schema: {
+                   login: "string",
+                   password: "string",
+                   roles: ["string "],
+                    status: "string"
+           }
+       }
      */
 
   // Only admin can access this endpoint

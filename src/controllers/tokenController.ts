@@ -17,10 +17,21 @@ const prisma = new PrismaClient();
 /**Create */
 
 export const createToken = async (req: Request, res: Response) => {
-/* 
-   #swagger.tags = ['Access Token']
-   #swagger.summary = 'This endpoint create a token.'
-   */
+    /* 
+       #swagger.tags = ['Access Token']
+       #swagger.summary = 'This endpoint creates a token.'
+       #swagger.parameters['createTokenRequest'] = {
+           in: 'body',
+           description: 'Token creation parameters',
+           required: true,
+           schema: {
+                   login: "string",
+                   password: "string",
+                   from: "string "
+           }
+       }
+    */
+
     const login: string = req.body.login;
     const password: string = req.body.password;
     const from: string = req.body.from;
@@ -64,7 +75,7 @@ export const createToken = async (req: Request, res: Response) => {
 };
 
 /**Access */
-export const createAccessToken = async (user: User | null) =>{
+export const createAccessToken = async (user: User | null) => {
 
     if (!user) {
         return null;
@@ -74,7 +85,7 @@ export const createAccessToken = async (user: User | null) =>{
     const refreshToken = jwt.sign({ login: user.login }, JWT_SECRET_REFRESH, { expiresIn: "2h" });
 
     let refreshTokenData = await prisma.refreshToken.findFirst({ where: { userId: user.id } });
-    console.log(" refreshToken Data",refreshTokenData);
+    console.log(" refreshToken Data", refreshTokenData);
     if (refreshTokenData) {
         await prisma.refreshToken.delete({ where: { userId: user.id } });
     }
@@ -105,10 +116,10 @@ interface CustomTokenPayload extends jwt.JwtPayload {
 }
 
 export const createTokenFromRefreshToken = async (req: Request, res: Response) => {
-     /* 
-  #swagger.tags = ['Refresh Token']
-  #swagger.summary = 'This endpoint creates an access token from a refresh token'.
-  */
+    /* 
+ #swagger.tags = ['Refresh Token']
+ #swagger.summary = 'This endpoint creates an access token from a refresh token'.
+ */
     const refreshToken: string = req.params.refreshToken;
 
     jwt.verify(refreshToken, JWT_SECRET_REFRESH, async (err, decodedToken) => {
@@ -141,10 +152,10 @@ export const createTokenFromRefreshToken = async (req: Request, res: Response) =
 /**Validate */
 
 export const ValidateToken = async (req: Request, res: Response) => {
-/* 
-   #swagger.tags = ['Access Token']
-   #swagger.summary = 'This endpoint create a token.'
-   */
+    /* 
+       #swagger.tags = ['Access Token']
+       #swagger.summary = 'This endpoint create a token.'
+       */
     const token: string = req.params.accessToken;
 
     jwt.verify(token, JWT_SECRET, async (err, decodedToken) => {
@@ -153,9 +164,9 @@ export const ValidateToken = async (req: Request, res: Response) => {
             return res.status(404).json({ error: 'Token is invalid' });
         }
 
-       const expiresIn =  new Date((decodedToken as JwtPayload).exp!);
+        const expiresIn = new Date((decodedToken as JwtPayload).exp!);
 
-        return res.status(200).json({ accessToken: token , accessTokenExpiresAt: expiresIn});
+        return res.status(200).json({ accessToken: token, accessTokenExpiresAt: expiresIn });
 
     });
 
